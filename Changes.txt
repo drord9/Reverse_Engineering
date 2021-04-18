@@ -1,6 +1,0 @@
-partb.nopt.s:
-the problem- L3 is put in the end of the program, the program should only get there if the input and random number are equal but gets here always, bigger and smaller case  after printing jump to L3 which leads them to end t he program(which shouldnt happen)
-to fix, we removed L3 and changed the instances of jumping to it to L6.
-partb.opt.s:
-the problem- after comparing the input , if the random number is greater or egual then it, the program will jump to L2, which will do the comparison again without printing a proper feedback and if the number is equal- without ending the program.
-to fix, we simply changed L2 to L3 which is the correct lable to continue the comparison
