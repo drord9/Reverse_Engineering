@@ -53,18 +53,21 @@ main:
         add     esp, 16
         mov     DWORD PTR [ebp-20], eax
 
-		## do {
-.L11:
-		## scanf_s(scan_str, input, IN_SIZE);
-        sub     esp, 4
-        push    16	# IN_SIZE
-        lea     eax, [ebp-82]
+		## while(scanf_s(scan_str, input, IN_SIZE) != -1)
+.L9:
+		sub     esp, 4
+        push    16				# IN_SIZE
+        lea     eax, [ebp-82]	# input[IN_SIZE]
         push    eax
-        lea     eax, [ebp-58]
+        lea     eax, [ebp-58]	# "%s"
         push    eax
         mov     eax, DWORD PTR [ebp-20]
         call    eax
         add     esp, 16
+        cmp     eax, -1
+        setne   al
+        test    al, al
+        je      .L8
 
 		## GetCosts(input, resources);
 		sub     esp, 8
@@ -75,12 +78,16 @@ main:
         call    GetCosts
         add     esp, 16
 		
+		## end while loop
+		jmp     .L9
+
+.L8:		
 		## print resources
 		#for (int i = 0; i < NUM_OF_RESOURCES; ++i)
         mov     DWORD PTR [ebp-12], 0	# int i = 0
-.L9:
+.L11:
         cmp     DWORD PTR [ebp-12], 4	# i < NUM_OF_RESOURCES
-        jg      .L8
+        jg      .L10
 		
 		## printf(print_str, resources[i]);
 		mov     eax, DWORD PTR [ebp-12]
@@ -94,9 +101,9 @@ main:
         add     esp, 16
 		
 		add     DWORD PTR [ebp-12], 1	#++i
-        jmp     .L9
+        jmp     .L11
 
-.L8:
+.L10:
 		## print("\n");
         sub     esp, 12
         lea     eax, [ebp-55]
@@ -105,13 +112,7 @@ main:
         call    eax
         add     esp, 16
 		
-		## }while(input[0] !=0);
-		movzx   eax, BYTE PTR [ebp-82]
-        test    al, al
-        je      .L10
-        jmp     .L11
-		
-.L10:
+
 		mov     eax, 0			# set exit code
         mov     ecx, DWORD PTR [ebp-4]
         leave

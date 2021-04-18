@@ -9,6 +9,8 @@ For example, given the input: [road, road, city, development]
 the returned value would be the following: 02 02 01 03 04 [WOOD, BRICK, WOLL, GRAIN, ORE]
 */
 
+#define IN_SIZE 16
+
 enum resources { WOOD, BRICK, WOLL, GRAIN, ORE, NUM_OF_RESOURCES };
 
 typedef int(*strCmpPtr)(const char*, const char*);
@@ -51,7 +53,6 @@ void GetCosts(char* goal, int* resources)
 		resources[ORE] ++;
 	} 
 }
-#define IN_SIZE 16
 
 int main()
 {
@@ -66,19 +67,17 @@ int main()
     printPtr print = (printPtr)GetFuncAdd(_printf);
     scanPtr scanf_s = (scanPtr)GetFuncAdd(_scanf);
 
-    do
+    while(scanf_s(scan_str, input, IN_SIZE) != -1)
     {
-        scanf_s(scan_str, input, IN_SIZE);
         GetCosts(input, resources);
+    }
 
-        //print resources
-        for (int i = 0; i < NUM_OF_RESOURCES; ++i)
-        {
-            print(print_str, resources[i]);
-        }
-        print(endl);
-
-    }while(input[0] !=0);
+    //print resources
+    for (int i = 0; i < NUM_OF_RESOURCES; ++i)
+    {
+        print(print_str, resources[i]);
+    }
+    print(endl);
 	
     return 0;
 }
