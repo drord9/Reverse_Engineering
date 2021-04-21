@@ -1,6 +1,8 @@
 .intel_syntax noprefix
 .global main
 
+## #define NUM_OF_RESOURCES 5
+
 main:
         lea     ecx, [esp+4]
         and     esp, -16
@@ -123,6 +125,8 @@ main:
 
 
 ## function: void GetCosts(char* goal, int resources[5])
+# input contains a single goal from {road, settlement, city, development}
+# output - Updates (accumulate) the resources needed to buy or build the given input.   
 GetCosts:
         push    ebp
         mov     ebp, esp
@@ -287,6 +291,8 @@ GetCosts:
 ##end GetCosts
 
 ## function: void* GetFuncAdd(char* funcName)
+# serch and return the address of function in the "msvcrt.dll" library.
+# using FindFunction witch provided in find_function.bin.
 GetFuncAdd:
 	push ebp            # store ebp
 	mov ebp, esp
