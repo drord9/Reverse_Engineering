@@ -406,20 +406,20 @@ _level2:
 	mov	BYTE PTR [ebp-38], 29 ;char x3=
 	mov	DWORD PTR [ebp-4], 0 ;int x4=
 	jmp	L33
-L34:
-	lea	eax, [ebp+8]
-	mov	DWORD PTR [esp], eax
+L34: ;while x4<=8 I think it fills ebp-37 to ebp-37+8 wtih random bytes
+	lea	eax, [ebp+8] ;eax=ebp+8
+	mov	DWORD PTR [esp], eax ;[esp]=ebp+8
 	call	_rand_32
 	cdq
 	shr	edx, 24
 	add	eax, edx
 	movzx	eax, al
-	sub	eax, edx
+	sub	eax, edx ;eax will be  4 bytes, removed 3 bytes of edx  which will leave 1 byte of rand , then added to eax and removed another byte
 	mov	ecx, eax
-	lea	edx, [ebp-37]
-	mov	eax, DWORD PTR [ebp-4]
-	add	eax, edx
-	mov	BYTE PTR [eax], cl
+	lea	edx, [ebp-37];edx=&x7
+	mov	eax, DWORD PTR [ebp-4];eax=x4
+	add	eax, edx 
+	mov	BYTE PTR [eax], cl ; byte in [&x7+x4]=cl
 	add	DWORD PTR [ebp-4], 1
 L33:
 	cmp	DWORD PTR [ebp-4], 8	
@@ -455,7 +455,7 @@ L33:
 	mov	eax, DWORD PTR [ebp-16] 
 	mov	DWORD PTR [ebp-8], eax ;x10 is -8 , x10=x8
 	jmp	L37
-L38:
+L38: while x10>x9
 	lea	eax, [ebp-52] ;eax=&x12
 	mov	DWORD PTR [esp+4], eax ;in1=&x12
 	mov	DWORD PTR [esp], OFFSET FLAT:LC16
