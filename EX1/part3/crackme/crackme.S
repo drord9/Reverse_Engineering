@@ -399,12 +399,12 @@ LC17:
 # _level2 (int x)
 _level2:
 	push	ebp
-	mov	ebp, esp
-	sub	esp, 64
-	mov	DWORD PTR [ebp-46], -743708653
-	mov	DWORD PTR [ebp-42], 433837368
-	mov	BYTE PTR [ebp-38], 29
-	mov	DWORD PTR [ebp-4], 0
+	mov	ebp, esp;local variables
+	sub	esp, 64;stack area 64 bytes
+	mov	DWORD PTR [ebp-46], -743708653 ;int x1=
+	mov	DWORD PTR [ebp-42], 433837368 ;int x2=
+	mov	BYTE PTR [ebp-38], 29 ;char x3=
+	mov	DWORD PTR [ebp-4], 0 ;int x4=
 	jmp	L33
 L34:
 	lea	eax, [ebp+8]
@@ -423,74 +423,74 @@ L34:
 	add	DWORD PTR [ebp-4], 1
 L33:
 	cmp	DWORD PTR [ebp-4], 8	
-	jle	L34						# x <= 8 goto L34
-	lea	eax, [ebp-28]
-	mov	DWORD PTR [esp+8], eax
-	lea	eax, [ebp-24]	#int y;
-	mov	DWORD PTR [esp+4], eax
+	jle	L34						# x4 <= 8 goto L34
+	lea	eax, [ebp-28]					#x5 is -28, eax=&x5
+	mov	DWORD PTR [esp+8], eax				#[esp+8]=in1
+	lea	eax, [ebp-24]	#int y;				#x6  is -24, eax=&x6
+	mov	DWORD PTR [esp+4], eax				#[esp+4]=in2
 	mov	DWORD PTR [esp], OFFSET FLAT:LC15
-	call	_scanf # _scanf("%d %d", &y)
-	mov	eax, DWORD PTR [ebp-24]
+	call	_scanf # _scanf("%d %d", &x5 &x6)
+	mov	eax, DWORD PTR [ebp-24]			;eax=x6
 	test	eax, eax
-	js	L43 		# if y < 0 goto L43
-	mov	eax, DWORD PTR [ebp-24]
-	mov	edx, eax
-	lea	eax, [ebp-37]	# 
-	add	eax, edx
-	and	eax, -4
-	mov	DWORD PTR [ebp-16], eax
-	mov	eax, DWORD PTR [ebp-28]
-	mov	edx, eax
-	lea	eax, [ebp-37]
-	add	eax, edx
-	and	eax, -4
-	mov	DWORD PTR [ebp-20], eax
-	mov	eax, DWORD PTR [ebp-20]
-	mov	DWORD PTR [esp+8], eax
+	js	L43 		# if x6 < 0 goto L43- ends the program, second input should be >0 then
+	mov	eax, DWORD PTR [ebp-24] ;eax=x6
+	mov	edx, eax	;edx=x6
+	lea	eax, [ebp-37]	#ebp-37 is x7 eax=&x7 
+	add	eax, edx	#eax=&x7+x6
+	and	eax, -4		#eax and 1111111111111100- remove the last 2 bits of eax
+	mov	DWORD PTR [ebp-16], eax ;x8=eax
+	mov	eax, DWORD PTR [ebp-28] #eax=x5
+	mov	edx, eax		#edx=x5
+	lea	eax, [ebp-37]	#eax=&x7
+	add	eax, edx	
+	and	eax, -4		#same computation
+	mov	DWORD PTR [ebp-20], eax ;x9=eax
+	mov	eax, DWORD PTR [ebp-20] 
+	mov	DWORD PTR [esp+8], eax ;in2=x9
 	mov	eax, DWORD PTR [ebp-16]
-	mov	DWORD PTR [esp+4], eax
+	mov	DWORD PTR [esp+4], eax ;in1=x8
 	lea	eax, [ebp-37]
-	mov	DWORD PTR [esp], eax
-	call	_printArray
-	mov	eax, DWORD PTR [ebp-16]
-	mov	DWORD PTR [ebp-8], eax
+	mov	DWORD PTR [esp], eax ;in0=&x7
+	call	_printArray ;printarray(&x7,x8,x9)
+	mov	eax, DWORD PTR [ebp-16] 
+	mov	DWORD PTR [ebp-8], eax ;x10 is -8 , x10=x8
 	jmp	L37
 L38:
-	lea	eax, [ebp-52]
-	mov	DWORD PTR [esp+4], eax
+	lea	eax, [ebp-52] ;eax=&x12
+	mov	DWORD PTR [esp+4], eax ;in1=&x12
 	mov	DWORD PTR [esp], OFFSET FLAT:LC16
-	call	_scanf
-	mov	eax, DWORD PTR [ebp-8]
-	mov	eax, DWORD PTR [eax]
-	mov	edx, eax
-	mov	eax, DWORD PTR [ebp-52]
-	xor	eax, edx
-	mov	edx, eax
-	mov	eax, DWORD PTR [ebp-8]
-	mov	DWORD PTR [eax], edx
-	add	DWORD PTR [ebp-8], 4
+	call	_scanf; scan("%X",&x12)
+	mov	eax, DWORD PTR [ebp-8] 
+	mov	eax, DWORD PTR [eax] #edx=*x10
+	mov	edx, eax 
+	mov	eax, DWORD PTR [ebp-52] ;eax=x12
+	xor	eax, edx ;edx= *x10 xor x12
+	mov	edx, eax 
+	mov	eax, DWORD PTR [ebp-8] ;eax=x8
+	mov	DWORD PTR [eax], edx ;*x10=edx
+	add	DWORD PTR [ebp-8], 4 ;x10+=4
 L37:
 	mov	eax, DWORD PTR [ebp-8]
-	cmp	eax, DWORD PTR [ebp-20]
+	cmp	eax, DWORD PTR [ebp-20] #if(x10>x9) go to L38
 	jb	L38
-	mov	DWORD PTR [ebp-12], 0
+	mov	DWORD PTR [ebp-12], 0 ; else x11=0 ,goto L39
 	jmp	L39
-L41:
-	lea	edx, [ebp-37]
-	mov	eax, DWORD PTR [ebp-12]
-	add	eax, edx
-	movzx	edx, BYTE PTR [eax]
+L41: #while x11<=8
+	lea	edx, [ebp-37] #eax=&x7
+	mov	eax, DWORD PTR [ebp-12] ;eax=x11
+	add	eax, edx ;eax= &x7+x11
+	movzx	edx, BYTE PTR [eax]; [eax] located byte goes to edx
 	lea	ecx, [ebp-46]
 	mov	eax, DWORD PTR [ebp-12]
 	add	eax, ecx
-	movzx	eax, BYTE PTR [eax]
-	cmp	dl, al
-	jne	L44
+	movzx	eax, BYTE PTR [eax]; [&x1+x11] byte goes to al
+	cmp	dl, al ;if this bytes arent equal exit
+	jne	L44 
 	add	DWORD PTR [ebp-12], 1
 L39:
-	cmp	DWORD PTR [ebp-12], 8
+	cmp	DWORD PTR [ebp-12], 8; checks if the 8 bytes are equal
 	jle	L41
-	mov	DWORD PTR [esp], OFFSET FLAT:LC17
+	mov	DWORD PTR [esp], OFFSET FLAT:LC17; in case they are return success
 	call	_puts
 	jmp	L32
 L43:
