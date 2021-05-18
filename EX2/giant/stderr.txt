@@ -1,1 +1,0 @@
-The encryption params are 32 (rounds) and 7730442 (delta)
