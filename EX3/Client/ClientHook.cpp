@@ -1,29 +1,11 @@
 
-// dllmain.cpp : Defines the entry point for the DLL application.
-//#include "pch.h"
 #include <windows.h>
-#include <stdio.h>
-#include <tlhelp32.h>
-#include <Shlwapi.h>
-#include <fstream>
-#include <iostream>
-#include <ios>
 #include <string>
 #include <stdlib.h>
 #include <sstream>
 
 using std::endl;
-using std::ofstream;
-using std::wofstream;
-using std::wstring;
 using std::string;
-
-
-//ofstream log_file("log.txt");
-
-LPVOID real_func_address;
-int len_override;
-
 
 char decrypt_char(char c)
 {
@@ -107,6 +89,8 @@ void decrypt_text(char* text)
 	}
 }
 
+LPVOID real_func_address;
+int len_override;
 
 __declspec(naked) void ClientHook()
 {
@@ -152,8 +136,7 @@ void setHook()
         return;
     }
     f = GetProcAddress(h, "puts");
-    // alternatively, get the function address by offset:
-    // f = (char*)h + offset_to_func
+
     if (f == NULL)
     {
         //log_file << "couldnt get function" << endl;

@@ -1,38 +1,30 @@
 #include <windows.h>
-#include <stdio.h>
-#include <tlhelp32.h>
-#include <Shlwapi.h>
+//#include <stdio.h>
+#include <string>
 
-//LPSTR DLL_PATH;
 #define DLL_PATH "Client.dll"
-#define true 1
-#define false 0
-
 
 BOOL dllInjector(const char* dllpath, DWORD pID);
 
-
 int main(int argc, char** argv)
-{
-   
+{   
     // Create Process SUSPENDED
     PROCESS_INFORMATION pi;
     STARTUPINFOA Startup;
     ZeroMemory(&Startup, sizeof(Startup));
     ZeroMemory(&pi, sizeof(pi));
-    // get the command line argument of the current process
-    //LPSTR lpCmdLine = GetCommandLineA();
-    if (argc < 2) {
-        printf("Usage: %s prog_name \n", argv[0]);
+
+    if (argc < 2)
+    {
+        //printf("Usage: %s prog_name \n", argv[0]);
         return 1;
     }
    
-    LPSTR lpCmdLine = (LPSTR)argv[1];
-    //DLL_PATH = (LPSTR)argv[2];
+    std::string lpCmdLine = std::string(argv[1]) + " DMSG";
 
-    printf("opening process %s\n", lpCmdLine);
-    if (CreateProcessA(lpCmdLine, NULL, NULL, NULL, NULL, CREATE_SUSPENDED, NULL, NULL, &Startup, &pi) == FALSE) {
-        printf("couldnt open process %s\n", lpCmdLine);
+    //printf("opening process %s\n", lpCmdLine);
+    if (CreateProcessA(NULL, (LPSTR)lpCmdLine.c_str(), NULL, NULL, NULL, CREATE_SUSPENDED, NULL, NULL, &Startup, &pi) == FALSE) {
+        //printf("couldnt open process %s\n", lpCmdLine);
         return 1;
     }
 
@@ -43,16 +35,7 @@ int main(int argc, char** argv)
        
     Sleep(1000); // Let the DLL finish loading
     ResumeThread(pi.hThread);
-    //printf("Injected dll successfully\n");
-
-    // Successfully created the process.  Wait for it to finish so we can use the console.
-    DWORD exitCode;
-    BOOL valid_exitCode;
-    do
-    {
-        WaitForSingleObject(pi.hProcess, INFINITE);
-        valid_exitCode = GetExitCodeProcess(pi.hProcess, &exitCode);        
-    } while (valid_exitCode && (exitCode == STILL_ACTIVE));    
+    //printf("Injected dll successfully\n");   
 
     return 0;
 }
@@ -66,7 +49,7 @@ BOOL dllInjector(const char* dllpath, DWORD pID)
     pHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pID);
 
     if (!pHandle) {
-        printf("couldnt open proccess with perms\n");
+        //printf("couldnt open proccess with perms\n");
         return false;
     }
         
