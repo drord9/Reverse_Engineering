@@ -92,20 +92,28 @@ void decrypt_text(char* text)
 LPVOID real_func_address;
 int len_override;
 
+char* str1;
+const char* ref = "MESSAGE: ";
+
 __declspec(naked) void ClientHook()
 {
-    __asm {
-		; do something here
+	//get server request
+	__asm {
+		mov eax, ebp
+		sub eax, 23
+		mov str1, eax
+	}
 
-		mov eax, [ebp + 12]
-		cmp eax, 1
-		jne restore
+	if (strncmp(str1, ref, strlen(ref)) == 0)
+	{//only if the server request was 'DMSG' decrypt the result string
+		__asm {
+			push[esp + 4]
+			call decrypt_text
+			pop eax	//clear stack		
+		}
+	}
 
-		push[esp + 4]
-		call decrypt_text
-		pop eax
-
-restore:
+	__asm{
 		; restore the commands overriden
 
 		push    14h
