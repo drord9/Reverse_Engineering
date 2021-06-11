@@ -1,0 +1,19 @@
+robber_code     db '0Q4T3K85KL',0 
+
+myHook:
+                mov     eax, [esp+4]
+                push    eax             ; Str2
+                mov     eax, offset robber_code ; "0Q4T3K85KL"
+                push    eax             ; Str1
+                call    strcmp
+                add     esp, 8
+				test    eax, eax
+                jnz     short orig_call
+                mov     eax, 6
+                shl     eax, 10h
+                or      eax, 1                
+                jmp     endMyHook
+orig_call:
+                call    sub_401410                
+endMyHook:				
+				jmp     retFromHook
