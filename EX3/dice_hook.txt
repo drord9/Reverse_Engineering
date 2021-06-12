@@ -9,10 +9,8 @@ myHook:
                 add     esp, 8
 				test    eax, eax
                 jnz     short orig_call
-                mov     eax, 6
-                shl     eax, 10h
-                or      eax, 1                
-                jmp     endMyHook
+                mov     eax, 7
+                mov     [esp], eax
 orig_call:
                 call    sub_401410                
 endMyHook:				
