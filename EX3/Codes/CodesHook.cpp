@@ -5,16 +5,16 @@
 LPVOID real_func_address;
 int len_override;
 
-char* str1;
+char* str2;
 const char* no_such_code = "NO SUCH CODE";
 
 __declspec(naked) void strcmp_hook()
 {
     //get second input to strcmp
     __asm mov eax, [esp + 8]
-    __asm mov str1, eax
+    __asm mov str2, eax
 
-    if (strncmp(str1, no_such_code, strlen(no_such_code)) == 0)
+    if (strncmp(str2, no_such_code, strlen(no_such_code)) == 0)
     {   // if compering to "NO SUCH CODE" than this is firs strcmp of "codes.exe"
         // return 1 to pass it
         __asm mov eax, 1

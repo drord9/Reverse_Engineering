@@ -6,12 +6,12 @@ myHook:
                 mov     eax, offset robber_code ; "0Q4T3K85KL"
                 push    eax             ; Str1
                 call    strcmp
-                add     esp, 8
+                add     esp, 8			;clear the stack
 				test    eax, eax
                 jnz     short orig_call
                 mov     eax, 7
                 mov     [esp], eax
 orig_call:
-                call    sub_401410                
+                call    drow_dice                
 endMyHook:				
 				jmp     retFromHook

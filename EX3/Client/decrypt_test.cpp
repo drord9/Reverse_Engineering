@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-void decrypt_text(char* text);
+extern void decrypt_text(char* text);
 
 
 int main()
@@ -17,47 +17,12 @@ int main()
 	decrypt_text(text);
 
 	std::cout << text;
+
+
+
 	return 0;
 }
 
-void encode_char(char c, char* output)
-{
-	char high, low;
-	low = c & 0xF;
-	high = c >> 0xF;
 
-	if (high > 1 && high <= 9)
-	{
-		high += '0';
-	}
-	else
-	{
-		switch (high)
-		{
-		case 0:
-
-			break;
-
-		case 1:
-			high = 'A';
-			break;
-		case 10:
-			high = 'J';
-			break;
-		case 11:
-			high = 'Q';
-			break;
-		case 12:
-			high = 'K';
-			break;
-
-		default:
-
-			break;
-		}
-	}
-
-	*output = high;
-}
 
 
