@@ -1,0 +1,4 @@
+echo RE 236496 rockes!
+date
+For ($i=1; $i -le 10; $i++) {\"9 * $i = $(9 * $i)\"}
+exit
